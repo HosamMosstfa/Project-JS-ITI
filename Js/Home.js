@@ -1,5 +1,4 @@
 //navbar
-
 document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
   
@@ -9,4 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
+document.getElementById("logoutBtn").addEventListener("click", function() {
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
+});

@@ -1,0 +1,170 @@
+[
+  {
+    "id": 1,
+    "name": "Emily",
+    "email": "emily.johnson@x.dummyjson.com",
+    "password": "emilyspass",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "name": "Michael",
+    "email": "michael.williams@x.dummyjson.com",
+    "password": "michaelwpass",
+    "role": "admin"
+  },
+  {
+    "id": 3,
+    "name": "Sophia",
+    "email": "sophia.brown@x.dummyjson.com",
+    "password": "sophiabpass",
+    "role": "admin"
+  },
+  {
+    "id": 4,
+    "name": "James Davis",
+    "email": "james.davis@x.dummyjson.com",
+    "password": "jamesdpass",
+    "role": "admin"
+  },
+  {
+    "id": 5,
+    "name": "Emma Miller",
+    "email": "emma.miller@x.dummyjson.com",
+    "password": "emmajpass",
+    "role": "admin"
+  },
+  {
+    "id": 6,
+    "name": "Olivia Wilson",
+    "email": "olivia.wilson@x.dummyjson.com",
+    "password": "oliviawpass",
+    "role": "customer"
+  },
+  {
+    "id": 7,
+    "name": "Alexander Jones",
+    "email": "alexander.jones@x.dummyjson.com",
+    "password": "alexanderjpass",
+    "role": "customer"
+  },
+  {
+    "id": 8,
+    "name": "Ava Taylor",
+    "email": "ava.taylor@x.dummyjson.com",
+    "password": "avatpass",
+    "role": "customer"
+  },
+  {
+    "id": 9,
+    "name": "Ethan Martinez",
+    "email": "ethan.martinez@x.dummyjson.com",
+    "password": "ethanmpass",
+    "role": "customer"
+  },
+  {
+    "id": 10,
+    "name": "Isabella Anderson",
+    "email": "isabella.anderson@x.dummyjson.com",
+    "password": "isabelladpass",
+    "role": "customer"
+  },
+  {
+    "id": 11,
+    "name": "Liam Garcia",
+    "email": "liam.garcia@x.dummyjson.com",
+    "password": "liamgpass",
+    "role": "customer"
+  },
+  {
+    "id": 12,
+    "name": "Mia Rodriguez",
+    "email": "mia.rodriguez@x.dummyjson.com",
+    "password": "miarpass",
+    "role": "customer"
+  },
+  {
+    "id": 13,
+    "name": "Noah Hernandez",
+    "email": "noah.hernandez@x.dummyjson.com",
+    "password": "noahhpass",
+    "role": "customer"
+  },
+  {
+    "id": 14,
+    "name": "Charlotte Lopez",
+    "email": "charlotte.lopez@x.dummyjson.com",
+    "password": "charlottempass",
+    "role": "customer"
+  },
+  {
+    "id": 15,
+    "name": "William Gonzalez",
+    "email": "william.gonzalez@x.dummyjson.com",
+    "password": "williamgpass",
+    "role": "customer"
+  },
+  {
+    "id": 16,
+    "name": "Avery Perez",
+    "email": "avery.perez@x.dummyjson.com",
+    "password": "averyppass",
+    "role": "customer"
+  },
+  {
+    "id": 17,
+    "name": "Evelyn Sanchez",
+    "email": "evelyn.sanchez@x.dummyjson.com",
+    "password": "evelynspass",
+    "role": "customer"
+  },
+  {
+    "id": 18,
+    "name": "Logan Torres",
+    "email": "logan.torres@x.dummyjson.com",
+    "password": "logantpass",
+    "role": "customer"
+  },
+  {
+    "id": 19,
+    "name": "Abigail Rivera",
+    "email": "abigail.rivera@x.dummyjson.com",
+    "password": "abigailrpass",
+    "role": "customer"
+  },
+  {
+    "id": 20,
+    "name": "Jackson Evans",
+    "email": "jackson.evans@x.dummyjson.com",
+    "password": "jacksonepass",
+    "role": "customer"
+  },
+  {
+    "id": 21,
+    "name": "Madison Collins",
+    "email": "madison.collins@x.dummyjson.com",
+    "password": "madisoncpass",
+    "role": "customer"
+  },
+  {
+    "id": 22,
+    "name": "Elijah Stewart",
+    "email": "elijah.stewart@x.dummyjson.com",
+    "password": "elijahspass",
+    "role": "customer"
+  },
+  {
+    "id": 23,
+    "name": "Chloe Morales",
+    "email": "chloe.morales@x.dummyjson.com",
+    "password": "chloempass",
+    "role": "customer"
+  },
+  {
+    "id": 24,
+    "name": "Mateo Nguyen",
+    "email": "mateo.nguyen@x.dummyjson.com",
+    "password": "mateonpass",
+    "role": "customer"
+  }
+]
