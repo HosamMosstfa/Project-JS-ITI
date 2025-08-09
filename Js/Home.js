@@ -139,4 +139,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
-//================================================
+
+//navbar
+document.addEventListener("DOMContentLoaded", () => {
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  
+  document.querySelectorAll(".navbar-nav .nav-link").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");
+    }
+  });
+});
+document.getElementById("logoutBtn").addEventListener("click", function() {
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
+});
