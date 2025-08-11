@@ -41,6 +41,15 @@ justify-content: center;
     color: gold;
 }
 
+.category-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.75);
+  background-color: lightblue;
+}
+
+.card:hover  {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.75);
+}
+
 .navbar-nav .nav-link.active {
   font-weight: bold;
   color: #0d6efd !important;}
