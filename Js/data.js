@@ -30,7 +30,7 @@ fetch("/user_json/users.json")
   .catch((error) => console.error("Error loading user.json:", error));
 
 // نفس الفكرة للـ products (لو عايز دمج)
-fetch("/Products_Json/products.json")
+fetch("/Data/products.json")
   .then((response) => response.json())
   .then((productData) => {
     const existingProductsRaw = localStorage.getItem("productsList");
