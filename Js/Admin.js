@@ -30,6 +30,49 @@ document.querySelectorAll(".nav-link").forEach((link) => {
   });
 });
 
+// Add Product Section
+function addProductToLocalStorage(newProduct) {
+  const existingProductsRaw = localStorage.getItem("productsList");
+  let existingProducts = [];
+  try {
+    existingProducts = existingProductsRaw ? JSON.parse(existingProductsRaw) : [];
+  } catch (err) {
+    existingProducts = [];
+  }
+  const newID = existingProducts.length > 0 ? Math.max(...existingProducts.map((p) => p.ID)) + 1 : 1;
+  const productWithID = { ...newProduct, ID: newID };
+  existingProducts.push(productWithID);
+  localStorage.setItem("productsList", JSON.stringify(existingProducts));
+  const categories = [...new Set(existingProducts.map((item) => item.Category))];
+  localStorage.setItem("Categories", JSON.stringify(categories));
+}
+
+document.getElementById("saveProductBtn").addEventListener("click", () => {
+  const name = document.getElementById("productName").value.trim();
+  const image = document.getElementById("productImage").value.trim();
+  const category = document.getElementById("productCategory").value.trim();
+  const price = document.getElementById("productPrice").value.trim();
+  const description = document.getElementById("productDescription").value.trim();
+  const stock = document.getElementById("productStock").value.trim();
+  const featured = document.getElementById("productFeatured").checked;
+  if (!name || !image || !category || !price || !description || !stock) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+  const newProduct = {
+    Name: name,
+    Image: image,
+    Category: category,
+    Price: parseFloat(price),
+    Description: description,
+    "Stock Quantity": parseInt(stock),
+    isFeatured: featured
+  };
+  addProductToLocalStorage(newProduct);
+  const modal = bootstrap.Modal.getInstance(document.getElementById("addProductModal"));
+  modal.hide();
+});
+
 // Product Table + Pagination + Search
 let products = JSON.parse(localStorage.getItem("productsList")) || [];
 let rowsPerPage = 7;
