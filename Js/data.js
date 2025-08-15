@@ -1,15 +1,16 @@
-// users.json fetch + محافظه على البيانات المحلية (ما تمسحش اللي اتسجّل)
+// Fetch users.json and keep local data (do not delete what was already saved)
 fetch("/user_json/users.json")
   .then((response) => response.json())
   .then((userData) => {
     try {
       const existing = JSON.parse(localStorage.getItem("usersList"));
+
       if (!Array.isArray(existing) || existing.length === 0) {
-        // لو مفيش usersList اعمل set
+        // If no usersList in localStorage, set it
         localStorage.setItem("usersList", JSON.stringify(userData));
         console.log("Users data saved from JSON (initial)");
       } else {
-        // لو فيه بيانات محلية نعمل دمج (لا نكرر بنفس الإيميل)
+        // Merge without duplicating same email
         const merged = [...existing];
         userData.forEach((u) => {
           const found = merged.some(
@@ -22,19 +23,26 @@ fetch("/user_json/users.json")
         console.log("Users data merged with local users");
       }
     } catch (err) {
-      // لو حدث خطأ في parse
+      // If parse failed, save new data
       localStorage.setItem("usersList", JSON.stringify(userData));
       console.log("Users data saved from JSON (fallback)");
     }
   })
-  .catch((error) => console.error("Error loading user.json:", error));
+  .catch((error) => console.error("Error loading users.json:", error));
 
-// نفس الفكرة للـ products (لو عايز دمج)
-fetch("/Products_Json/products.json")
+// Fetch products.json and keep local data (merge if needed)
+fetch("/Data/products.json")
   .then((response) => response.json())
   .then((productData) => {
+    // Ensure all products have their original Image field
+    productData = productData.map((p) => ({
+      ...p,
+      Image: p.Image, // Keep the image from JSON
+    }));
+
     const existingProductsRaw = localStorage.getItem("productsList");
     let existingProducts = [];
+
     try {
       existingProducts = existingProductsRaw
         ? JSON.parse(existingProductsRaw)
@@ -44,19 +52,21 @@ fetch("/Products_Json/products.json")
     }
 
     if (!Array.isArray(existingProducts) || existingProducts.length === 0) {
+      // If no productsList in localStorage, set it
       localStorage.setItem("productsList", JSON.stringify(productData));
-      console.log("Products data saved from JSON (initial)");
+      console.log("Products data saved from JSON (with images)");
     } else {
-      // دمج بدون تكرار بناءً على ID أو اسم المنتج (عدل الشرط حسب ملفك)
+      // Merge without duplication (based on ID)
       const merged = [...existingProducts];
       productData.forEach((p) => {
-        const found = merged.some((m) => m.ID === p.ID); // افترض إن كل منتج له ID
+        const found = merged.some((m) => m.ID === p.ID);
         if (!found) merged.push(p);
       });
       localStorage.setItem("productsList", JSON.stringify(merged));
-      console.log("Products merged with local products");
+      console.log("Products merged with local products (with images)");
     }
 
+    // Extract unique categories and save them
     const categories = [
       ...new Set(
         JSON.parse(localStorage.getItem("productsList") || "[]").map(
@@ -67,4 +77,4 @@ fetch("/Products_Json/products.json")
     localStorage.setItem("Categories", JSON.stringify(categories));
     console.log("Categories saved:", categories);
   })
-  .catch((error) => console.error("Error loading product.json:", error));
+  .catch((error) => console.error("Error loading products.json:", error));
