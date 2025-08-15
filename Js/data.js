@@ -30,7 +30,6 @@ fetch("/user_json/users.json")
   })
   .catch((error) => console.error("Error loading users.json:", error));
 
-// Fetch products.json and keep local data (merge if needed)
 fetch("/Data/products.json")
   .then((response) => response.json())
   .then((productData) => {
