@@ -35,15 +35,22 @@ function addProductToLocalStorage(newProduct) {
   const existingProductsRaw = localStorage.getItem("productsList");
   let existingProducts = [];
   try {
-    existingProducts = existingProductsRaw ? JSON.parse(existingProductsRaw) : [];
+    existingProducts = existingProductsRaw
+      ? JSON.parse(existingProductsRaw)
+      : [];
   } catch (err) {
     existingProducts = [];
   }
-  const newID = existingProducts.length > 0 ? Math.max(...existingProducts.map((p) => p.ID)) + 1 : 1;
+  const newID =
+    existingProducts.length > 0
+      ? Math.max(...existingProducts.map((p) => p.ID)) + 1
+      : 1;
   const productWithID = { ...newProduct, ID: newID };
   existingProducts.push(productWithID);
   localStorage.setItem("productsList", JSON.stringify(existingProducts));
-  const categories = [...new Set(existingProducts.map((item) => item.Category))];
+  const categories = [
+    ...new Set(existingProducts.map((item) => item.Category)),
+  ];
   localStorage.setItem("Categories", JSON.stringify(categories));
 }
 
@@ -52,7 +59,9 @@ document.getElementById("saveProductBtn").addEventListener("click", () => {
   const image = document.getElementById("productImage").value.trim();
   const category = document.getElementById("productCategory").value.trim();
   const price = document.getElementById("productPrice").value.trim();
-  const description = document.getElementById("productDescription").value.trim();
+  const description = document
+    .getElementById("productDescription")
+    .value.trim();
   const stock = document.getElementById("productStock").value.trim();
   const featured = document.getElementById("productFeatured").checked;
   if (!name || !image || !category || !price || !description || !stock) {
@@ -66,10 +75,12 @@ document.getElementById("saveProductBtn").addEventListener("click", () => {
     Price: parseFloat(price),
     Description: description,
     "Stock Quantity": parseInt(stock),
-    isFeatured: featured
+    isFeatured: featured,
   };
   addProductToLocalStorage(newProduct);
-  const modal = bootstrap.Modal.getInstance(document.getElementById("addProductModal"));
+  const modal = bootstrap.Modal.getInstance(
+    document.getElementById("addProductModal")
+  );
   modal.hide();
 });
 
@@ -98,8 +109,8 @@ function displayProducts(page) {
         <td>${product.Price} EGP</td>
         <td>${product["Stock Quantity"]}</td>
         <td>
-          <button class="btn btn-warning btn-sm">Edit</button>
-          <button class="btn btn-danger btn-sm">Delete</button>
+          <button class="btn btn-warning btn-sm edit-btn" data-id="${product.ID}" >Edit</button>
+          <button class="btn btn-danger btn-sm delete-btn" >Delete</button>
         </td>
       </tr>
     `;
@@ -150,6 +161,7 @@ function setupPagination() {
 
       displayProducts(currentPage);
       setupPagination();
+      setupEditButtons();
     });
   });
 }
@@ -165,58 +177,66 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
   currentPage = 1;
   displayProducts(currentPage);
   setupPagination();
+  setupEditButtons();
 });
 
 // Initial load
 displayProducts(currentPage);
 setupPagination();
+setupEditButtons();
 
 // ===================== CATEGORIES MANAGEMENT =====================
 
-document.getElementById("searchCategories")?.addEventListener("input", function () {
-  const searchTerm = this.value.toLowerCase();
-  const rows = document.querySelectorAll("#categoriesTableBody tr");
+document
+  .getElementById("searchCategories")
+  ?.addEventListener("input", function () {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#categoriesTableBody tr");
 
-  rows.forEach(row => {
-    const nameCell = row.querySelector("td:nth-child(3)");
-    if (nameCell) {
-      const nameText = nameCell.textContent.toLowerCase();
-      row.style.display = nameText.includes(searchTerm) ? "" : "none";
-    }
+    rows.forEach((row) => {
+      const nameCell = row.querySelector("td:nth-child(3)");
+      if (nameCell) {
+        const nameText = nameCell.textContent.toLowerCase();
+        row.style.display = nameText.includes(searchTerm) ? "" : "none";
+      }
+    });
   });
-});
 
 (() => {
   const defaultDescriptions = {
     beauty: "High-quality beauty and personal care products.",
     fragrances: "Premium perfumes with long-lasting scents.",
     furniture: "Modern and comfortable furniture for every space.",
-    groceries: "Fresh groceries to meet your daily needs."
+    groceries: "Fresh groceries to meet your daily needs.",
   };
 
-  let catNames  = JSON.parse(localStorage.getItem("Categories")) || [];
-  let catDescs  = JSON.parse(localStorage.getItem("CategoryDescriptions")) || {};
+  let catNames = JSON.parse(localStorage.getItem("Categories")) || [];
+  let catDescs = JSON.parse(localStorage.getItem("CategoryDescriptions")) || {};
   let catImages = JSON.parse(localStorage.getItem("CategoryImages")) || {};
 
-  const tableBody   = document.getElementById("categoriesTableBody");
-  const selectAll   = document.getElementById("selectAllCategories");
-  const addBtn      = document.getElementById("addCategoryBtn");
-  const bulkDelBtn  = document.getElementById("deleteSelectedCategories");
+  const tableBody = document.getElementById("categoriesTableBody");
+  const selectAll = document.getElementById("selectAllCategories");
+  const addBtn = document.getElementById("addCategoryBtn");
+  const bulkDelBtn = document.getElementById("deleteSelectedCategories");
 
   if (!tableBody) return;
 
-  const modalEl       = document.getElementById("categoryModal");
-  const modal         = modalEl ? new bootstrap.Modal(modalEl) : null;
-  const form          = document.getElementById("categoryForm");
+  const modalEl = document.getElementById("categoryModal");
+  const modal = modalEl ? new bootstrap.Modal(modalEl) : null;
+  const form = document.getElementById("categoryForm");
   const deleteModalEl = document.getElementById("deleteConfirmModal");
-  const deleteModal   = deleteModalEl ? new bootstrap.Modal(deleteModalEl) : null;
+  const deleteModal = deleteModalEl ? new bootstrap.Modal(deleteModalEl) : null;
   const warningModalEl = document.getElementById("warningModal");
-  const warningModal   = warningModalEl ? new bootstrap.Modal(warningModalEl) : null;
+  const warningModal = warningModalEl
+    ? new bootstrap.Modal(warningModalEl)
+    : null;
 
   let editIndex = null;
   let deleteIndexes = [];
 
-  function cap1(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ""; }
+  function cap1(s) {
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
+  }
 
   function saveAll() {
     localStorage.setItem("Categories", JSON.stringify(catNames));
@@ -236,14 +256,20 @@ document.getElementById("searchCategories")?.addEventListener("input", function 
       return;
     }
 
-    tableBody.innerHTML = catNames.map((name, i) => {
-      const key  = (name || "").toLowerCase();
-      const desc = catDescs[key] || defaultDescriptions[key] || "No description available";
-      const img  = (catImages[key] || key) + ".jpg";
-      return `
+    tableBody.innerHTML = catNames
+      .map((name, i) => {
+        const key = (name || "").toLowerCase();
+        const desc =
+          catDescs[key] ||
+          defaultDescriptions[key] ||
+          "No description available";
+        const img = (catImages[key] || key) + ".jpg";
+        return `
         <tr>
           <td><input type="checkbox" class="category-check" data-index="${i}"></td>
-          <td><img src="image/${img}" alt="${cap1(name)}" style="max-width:80px; object-fit:contain;"></td>
+          <td><img src="image/${img}" alt="${cap1(
+          name
+        )}" style="max-width:80px; object-fit:contain;"></td>
           <td>${cap1(name)}</td>
           <td>${desc}</td>
           <td>
@@ -252,7 +278,8 @@ document.getElementById("searchCategories")?.addEventListener("input", function 
           </td>
         </tr>
       `;
-    }).join("");
+      })
+      .join("");
   }
 
   function openAddModal() {
@@ -265,7 +292,7 @@ document.getElementById("searchCategories")?.addEventListener("input", function 
   function openEditModal(index) {
     editIndex = index;
     const name = catNames[index] || "";
-    const key  = name.toLowerCase();
+    const key = name.toLowerCase();
     document.getElementById("categoryModalLabel").textContent = "Edit Category";
     document.getElementById("categoryName").value = name;
     document.getElementById("categoryDescription").value = catDescs[key] || "";
@@ -275,7 +302,7 @@ document.getElementById("searchCategories")?.addEventListener("input", function 
 
   function deleteOne(index) {
     const name = catNames[index];
-    const key  = (name || "").toLowerCase();
+    const key = (name || "").toLowerCase();
     catNames.splice(index, 1);
     delete catDescs[key];
     delete catImages[key];
@@ -283,34 +310,40 @@ document.getElementById("searchCategories")?.addEventListener("input", function 
 
   function getSelectedIndexes() {
     return Array.from(document.querySelectorAll(".category-check"))
-      .filter(ch => ch.checked)
-      .map(ch => parseInt(ch.dataset.index));
+      .filter((ch) => ch.checked)
+      .map((ch) => parseInt(ch.dataset.index));
   }
 
   function showDeleteModal(indexes) {
     deleteIndexes = indexes;
-    const deleteCountText = indexes.length === 1 ? "this category" : `${indexes.length} categories`;
+    const deleteCountText =
+      indexes.length === 1 ? "this category" : `${indexes.length} categories`;
     document.getElementById("deleteCount").textContent = deleteCountText;
     deleteModal && deleteModal.show();
   }
 
-  document.getElementById("confirmDeleteBtn")?.addEventListener("click", function () {
-    deleteIndexes.sort((a, b) => b - a).forEach(deleteOne);
-    saveAll();
-    renderCategories();
-    deleteModal && deleteModal.hide();
-  });
+  document
+    .getElementById("confirmDeleteBtn")
+    ?.addEventListener("click", function () {
+      deleteIndexes.sort((a, b) => b - a).forEach(deleteOne);
+      saveAll();
+      renderCategories();
+      deleteModal && deleteModal.hide();
+    });
 
   addBtn?.addEventListener("click", openAddModal);
 
   bulkDelBtn?.addEventListener("click", () => {
     const sel = getSelectedIndexes();
-    if (!sel.length) return showWarning("Please select at least one category to delete");
+    if (!sel.length)
+      return showWarning("Please select at least one category to delete");
     showDeleteModal(sel);
   });
 
   selectAll?.addEventListener("change", (e) => {
-    document.querySelectorAll(".category-check").forEach(ch => ch.checked = e.target.checked);
+    document
+      .querySelectorAll(".category-check")
+      .forEach((ch) => (ch.checked = e.target.checked));
   });
 
   tableBody.addEventListener("click", (e) => {
@@ -323,28 +356,39 @@ document.getElementById("searchCategories")?.addEventListener("input", function 
 
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const name  = document.getElementById("categoryName").value.trim();
-    const desc  = document.getElementById("categoryDescription").value.trim();
-    const image = document.getElementById("categoryImage").value.trim().toLowerCase();
+    const name = document.getElementById("categoryName").value.trim();
+    const desc = document.getElementById("categoryDescription").value.trim();
+    const image = document
+      .getElementById("categoryImage")
+      .value.trim()
+      .toLowerCase();
 
     if (!name) return showWarning("Please enter a category name");
 
     const newKey = name.toLowerCase();
 
     if (editIndex === null) {
-      if (catNames.some(n => (n || "").toLowerCase() === newKey)) return showWarning("Category already exists");
+      if (catNames.some((n) => (n || "").toLowerCase() === newKey))
+        return showWarning("Category already exists");
       catNames.push(name);
     } else {
       const oldName = catNames[editIndex];
-      const oldKey  = (oldName || "").toLowerCase();
+      const oldKey = (oldName || "").toLowerCase();
       catNames[editIndex] = name;
       if (oldKey !== newKey) {
-        if (catDescs.hasOwnProperty(oldKey)) { catDescs[newKey] = catDescs[oldKey]; delete catDescs[oldKey]; }
-        if (catImages.hasOwnProperty(oldKey)) { catImages[newKey] = catImages[oldKey]; delete catImages[oldKey]; }
+        if (catDescs.hasOwnProperty(oldKey)) {
+          catDescs[newKey] = catDescs[oldKey];
+          delete catDescs[oldKey];
+        }
+        if (catImages.hasOwnProperty(oldKey)) {
+          catImages[newKey] = catImages[oldKey];
+          delete catImages[oldKey];
+        }
       }
     }
 
-    if (desc) catDescs[newKey] = desc; else delete catDescs[newKey];
+    if (desc) catDescs[newKey] = desc;
+    else delete catDescs[newKey];
     catImages[newKey] = image || newKey;
 
     saveAll();
@@ -354,6 +398,93 @@ document.getElementById("searchCategories")?.addEventListener("input", function 
 
   renderCategories();
 })();
+// peter edit buttons
+// Edit Product Functionality
+function setupEditButtons() {
+  document.querySelectorAll(".edit-btn").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const productId = parseInt(this.getAttribute("data-id"));
+      const product = products.find((p) => p.ID === productId);
 
+      if (product) {
+        // Fill the edit modal with product data
+        document.getElementById("editProductId").value = product.ID;
+        document.getElementById("editProductName").value = product.Name;
+        document.getElementById("editProductImage").value = product.Image;
+        document.getElementById("editProductCategory").value = product.Category;
+        document.getElementById("editProductPrice").value = product.Price;
+        document.getElementById("editProductDescription").value =
+          product.Description;
+        document.getElementById("editProductStock").value =
+          product["Stock Quantity"];
+        document.getElementById("editProductFeatured").checked =
+          product.isFeatured || false;
 
+        // Show the modal
+        const editModal = new bootstrap.Modal(
+          document.getElementById("editModal")
+        );
+        editModal.show();
+      }
+    });
+  });
+}
 
+// Update Product Function
+document
+  .getElementById("updateProductBtn")
+  .addEventListener("click", function () {
+    const id = parseInt(document.getElementById("editProductId").value);
+    const name = document.getElementById("editProductName").value.trim();
+    const image = document.getElementById("editProductImage").value.trim();
+    const category = document
+      .getElementById("editProductCategory")
+      .value.trim();
+    const price = document.getElementById("editProductPrice").value.trim();
+    const description = document
+      .getElementById("editProductDescription")
+      .value.trim();
+    const stock = document.getElementById("editProductStock").value.trim();
+    const featured = document.getElementById("editProductFeatured").checked;
+
+    if (!name || !image || !category || !price || !description || !stock) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // Find the product index
+    const productIndex = products.findIndex((p) => p.ID === id);
+
+    if (productIndex !== -1) {
+      // Update the product
+      products[productIndex] = {
+        ...products[productIndex],
+        Name: name,
+        Image: image,
+        Category: category,
+        Price: parseFloat(price),
+        Description: description,
+        "Stock Quantity": parseInt(stock),
+        isFeatured: featured,
+      };
+
+      // Save to localStorage
+      localStorage.setItem("productsList", JSON.stringify(products));
+
+      // Update categories if needed
+      const categories = [...new Set(products.map((item) => item.Category))];
+      localStorage.setItem("Categories", JSON.stringify(categories));
+
+      // Refresh the table
+      displayProducts(currentPage);
+      setupPagination();
+      setupEditButtons();
+
+      // Close the modal
+      const modal = bootstrap.Modal.getInstance(
+        document.getElementById("editModal")
+      );
+      window.location.reload();
+      modal.hide();
+    }
+  });
