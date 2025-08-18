@@ -5,18 +5,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // featured products
   products = products.map((p, i) => {
     if (p.isFeatured === undefined) {
-      p.isFeatured = i === 0; 
+      p.isFeatured = i === 0;
     }
     return p;
   });
 
   localStorage.setItem("productsList", JSON.stringify(products));
 
-  const featuredProducts = products.filter(p => p.isFeatured);
+  const featuredProducts = products.filter((p) => p.isFeatured);
   const featureContainer = document.getElementById("featured-products-row");
   if (featureContainer) {
     featureContainer.innerHTML = "";
-    featuredProducts.forEach(product => {
+    featuredProducts.forEach((product) => {
       featureContainer.innerHTML += `
     <div class="col-md-4 col-lg-3 mb-4">
       <div class="card h-100 d-flex flex-column">
@@ -43,7 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
               Add to Cart
             </button>
 
-            <button class="btn btn-outline-danger flex-fill">
+            <button 
+              class="btn btn-outline-danger flex-fill" 
+              onclick="addToWishlist(${product.ID})"
+            >
               Add to Wishlist
             </button>
 
@@ -59,10 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const productsContainer = document.getElementById("productsContainer");
   if (productsContainer) {
     if (products.length === 0) {
-      productsContainer.innerHTML = "<p class='text-center'>لا يوجد منتجات متاحة حالياً</p>";
+      productsContainer.innerHTML =
+        "<p class='text-center'>لا يوجد منتجات متاحة حالياً</p>";
     } else {
       let cardsHTML = "";
-      products.forEach(product => {
+      products.forEach((product) => {
         cardsHTML += `
     <div class="col-md-4 col-lg-3 mb-4">
       <div class="card h-100 d-flex flex-column">
@@ -89,7 +93,10 @@ document.addEventListener("DOMContentLoaded", () => {
               Add to Cart
             </button>
 
-            <button class="btn btn-outline-danger flex-fill">
+            <button 
+              class="btn btn-outline-danger flex-fill"
+              onclick="addToWishlist(${product.ID})"
+            >
               Add to Wishlist
             </button>
 
@@ -104,6 +111,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Add to Wishlist function
+function addToWishlist(productId) {
+  let products = JSON.parse(localStorage.getItem("productsList")) || [];
+  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  const product = products.find((p) => p.ID === productId);
+  if (product) {
+    // check if product already exists
+    const exists = wishlist.some((item) => item.ID === productId);
+    if (!exists) {
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      alert(`${product.Name} added to your wishlist ❤️`);
+    } else {
+      alert(`${product.Name} is already in your wishlist!`);
+    }
+  }
+}
+
 // categories
 document.addEventListener("DOMContentLoaded", () => {
   const categories = JSON.parse(localStorage.getItem("Categories")) || [];
@@ -115,17 +141,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (categoriesContainer) {
     if (categories.length === 0) {
-      categoriesContainer.innerHTML = "<p class='text-center'>لا توجد فئات حالياً</p>";
+      categoriesContainer.innerHTML =
+        "<p class='text-center'>لا توجد فئات حالياً</p>";
     } else {
       let cardsHTML = "";
 
-      categories.forEach(categoryName => {
+      categories.forEach((categoryName) => {
         const imageName = categoryName.toLowerCase();
         const displayName = capitalizeFirstLetter(categoryName);
 
         cardsHTML += `
           <div class="col-6 col-md-4 col-lg-3">
-            <a href="products.html?category=${encodeURIComponent(categoryName)}" class="text-decoration-none text-dark">
+            <a href="products.html?category=${encodeURIComponent(
+              categoryName
+            )}" class="text-decoration-none text-dark">
               <div class="card text-center p-3 h-100 category-card" style="cursor:pointer;">
                 <img src="image/${imageName}.jpg" alt="${displayName}" class="img-fluid mb-2" style="max-height: 120px; object-fit: contain;">
                 <div class="card-body d-flex align-items-center justify-content-center">
@@ -145,14 +174,15 @@ document.addEventListener("DOMContentLoaded", () => {
 //navbar
 document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
-  
-  document.querySelectorAll(".navbar-nav .nav-link").forEach(link => {
+
+  document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
     if (link.getAttribute("href") === currentPage) {
       link.classList.add("active");
     }
   });
 });
-document.getElementById("logoutBtn").addEventListener("click", function() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "login.html";
+
+document.getElementById("logoutBtn").addEventListener("click", function () {
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
 });
