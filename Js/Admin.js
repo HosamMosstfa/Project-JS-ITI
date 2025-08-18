@@ -109,8 +109,8 @@ function displayProducts(page) {
         <td>${product.Price} EGP</td>
         <td>${product["Stock Quantity"]}</td>
         <td>
-          <button class="btn btn-warning btn-sm edit-btn" data-id="${product.ID}" >Edit</button>
-          <button class="btn btn-danger btn-sm delete-btn" >Delete</button>
+          <button class="btn btn-warning btn-sm edit-btn" data-id="${product.ID}" >Edit</button>       
+        <button class="btn btn-danger btn-sm delete-btn" data-id="${product.ID}">Delete</button>
         </td>
       </tr>
     `;
@@ -429,7 +429,28 @@ function setupEditButtons() {
     });
   });
 }
+//-----------DELETE FUNCTION-------------------
+function deleteProduct(id) {
+  let products = JSON.parse(localStorage.getItem("productsList")) || [];
 
+  products = products.filter(product => product.ID !== id);
+
+  localStorage.setItem("productsList", JSON.stringify(products));
+
+  filteredProducts = [...products];
+
+  displayProducts(currentPage);
+  setupPagination();
+}
+//--------ADD EVENT LISTENER---------
+tableBody.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    const productId = parseInt(e.target.getAttribute("data-id"));
+    if (confirm("Are you sure you want to delete this product?")) {
+      deleteProduct(productId);
+    }
+  }
+});
 // Update Product Function
 document
   .getElementById("updateProductBtn")
