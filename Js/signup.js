@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // منع دخول صفحة التسجيل لو المستخدم مسجل دخول
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (currentUser) {
     if (currentUser.role === "admin") {
