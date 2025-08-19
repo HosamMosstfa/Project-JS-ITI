@@ -23,20 +23,8 @@
   color: black;
 }
 
-#hero button {
-  background-color: gold;
-  color: darkblue;
-  border: none;
-  padding: 15px 30px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 15px;
-  border-radius: 25px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
 
-#hero button:hover {
+#hero .btn:hover {
   background-color: darkblue;
   color: gold;
 }
