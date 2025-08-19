@@ -2,24 +2,25 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
-  
-  document.querySelectorAll(".navbar-nav .nav-link").forEach(link => {
+
+  document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
     if (link.getAttribute("href") === currentPage) {
       link.classList.add("active");
     }
   });
+  updateCartCount();
 });
 
-// Products + Filters 
+// Products + Filters
 document.addEventListener("DOMContentLoaded", () => {
   // Elements
   const productsContainer = document.getElementById("productsContainer");
-  const searchInput       = document.getElementById("searchInput");
-  const categorySelect    = document.getElementById("categorySelect");
-  const minPriceInput     = document.getElementById("minPrice");
-  const maxPriceInput     = document.getElementById("maxPrice");
-  const filterForm        = document.getElementById("filterForm");
-  const urlParams         = new URLSearchParams(window.location.search);
+  const searchInput = document.getElementById("searchInput");
+  const categorySelect = document.getElementById("categorySelect");
+  const minPriceInput = document.getElementById("minPrice");
+  const maxPriceInput = document.getElementById("maxPrice");
+  const filterForm = document.getElementById("filterForm");
+  const urlParams = new URLSearchParams(window.location.search);
 
   // Data
   let productsList = JSON.parse(localStorage.getItem("productsList")) || [];
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    list.forEach(product => {
+    list.forEach((product) => {
       productsContainer.innerHTML += `
         <div class="col-md-4 col-lg-3 mb-4">
           <div class="card h-100 d-flex flex-column">
@@ -51,12 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 </small>
               </p>
               <div class="mt-auto d-flex gap-2">
-                <button 
-                  class="btn btn-outline-primary flex-fill"
-                  onmouseover="this.classList.remove('btn-outline-primary'); this.classList.add('btn-primary');"
-                  onmouseout="this.classList.remove('btn-primary'); this.classList.add('btn-outline-primary');"
-                >
-                  Add to Cart
+                <button class="btn btn-outline-primary flex-fill" onclick="addToCart(${product.ID})">
+                   Add to Cart
                 </button>
                 <button class="btn btn-outline-danger flex-fill">
                   Add to Wishlist
@@ -72,26 +69,30 @@ document.addEventListener("DOMContentLoaded", () => {
   //! Populate categories
   function populateCategories() {
     const keyCats = (JSON.parse(localStorage.getItem("Categories")) || [])
-      .map(c => String(c).trim())
+      .map((c) => String(c).trim())
       .filter(Boolean);
 
     let categories = keyCats.length
       ? Array.from(new Set(keyCats))
-      : Array.from(new Set(productsList.map(p => p.Category).filter(Boolean)));
+      : Array.from(
+          new Set(productsList.map((p) => p.Category).filter(Boolean))
+        );
 
     // Reset options
     categorySelect.innerHTML = `<option value="">All Categories</option>`;
-    categories.forEach(cat => {
+    categories.forEach((cat) => {
       const val = String(cat).trim();
-      categorySelect.innerHTML += `<option value="${val}">${val.charAt(0).toUpperCase() + val.slice(1)}</option>`;
+      categorySelect.innerHTML += `<option value="${val}">${
+        val.charAt(0).toUpperCase() + val.slice(1)
+      }</option>`;
     });
   }
 
   // Init price fields
   function initPriceFields() {
     const prices = (productsList || [])
-      .map(p => Number(p.Price) || 0)
-      .filter(p => !isNaN(p));
+      .map((p) => Number(p.Price) || 0)
+      .filter((p) => !isNaN(p));
 
     const maxPrice = prices.length ? Math.max(...prices) : 0;
     const minPrice = prices.length ? Math.min(...prices) : 0;
@@ -105,22 +106,28 @@ document.addEventListener("DOMContentLoaded", () => {
     if (maxPriceInput) {
       maxPriceInput.min = 0;
       maxPriceInput.step = "1";
-      maxPriceInput.placeholder = maxPrice ? `Max: ${Math.ceil(maxPrice)}` : "Enter max price";
+      maxPriceInput.placeholder = maxPrice
+        ? `Max: ${Math.ceil(maxPrice)}`
+        : "Enter max price";
     }
   }
 
   // Filter logic
   function applyFilters() {
-    const q   = (searchInput?.value || "").trim().toLowerCase();
+    const q = (searchInput?.value || "").trim().toLowerCase();
     const cat = (categorySelect?.value || "").trim().toLowerCase();
 
     const minP = minPriceInput?.value ? Number(minPriceInput.value) : 0;
     const maxP = maxPriceInput?.value ? Number(maxPriceInput.value) : Infinity;
 
-    const filtered = productsList.filter(p => {
-      const nameMatch = !q || String(p.Name || "").toLowerCase().includes(q);
-      const catMatch  = !cat || String(p.Category || "").toLowerCase() === cat;
-      const priceVal  = Number(p.Price) || 0;
+    const filtered = productsList.filter((p) => {
+      const nameMatch =
+        !q ||
+        String(p.Name || "")
+          .toLowerCase()
+          .includes(q);
+      const catMatch = !cat || String(p.Category || "").toLowerCase() === cat;
+      const priceVal = Number(p.Price) || 0;
       const priceMatch = priceVal >= minP && priceVal <= maxP;
       return nameMatch && catMatch && priceMatch;
     });
@@ -132,8 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function applyCategoryFromURL() {
     const catParam = (urlParams.get("category") || "").trim();
     if (catParam && categorySelect) {
-      const opt = Array.from(categorySelect.options).find(o =>
-        o.value.toLowerCase() === catParam.toLowerCase()
+      const opt = Array.from(categorySelect.options).find(
+        (o) => o.value.toLowerCase() === catParam.toLowerCase()
       );
       if (opt) {
         categorySelect.value = opt.value;
@@ -157,10 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 0);
   });
 
-  // Initial load 
+  // Initial load
   populateCategories();
   initPriceFields();
   applyCategoryFromURL();
   displayProducts(productsList);
   applyFilters();
+  updateCartCount();
 });

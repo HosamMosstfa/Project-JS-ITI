@@ -35,13 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <div class="mt-auto d-flex gap-2">
 
-            <button 
-              class="btn btn-outline-primary flex-fill"
-              onmouseover="this.classList.remove('btn-outline-primary'); this.classList.add('btn-primary');"
-              onmouseout="this.classList.remove('btn-primary'); this.classList.add('btn-outline-primary');"
-            >
-              Add to Cart
-            </button>
+          <button 
+            class="btn btn-outline-primary flex-fill"
+            onclick="addToCart(${product.ID})"
+          >
+            Add to Cart
+          </button>
 
             <button 
               class="btn btn-outline-danger flex-fill" 
@@ -85,13 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <div class="mt-auto d-flex gap-2">
 
-            <button 
-              class="btn btn-outline-primary flex-fill"
-              onmouseover="this.classList.remove('btn-outline-primary'); this.classList.add('btn-primary');"
-              onmouseout="this.classList.remove('btn-primary'); this.classList.add('btn-outline-primary');"
-            >
-              Add to Cart
-            </button>
+          <button 
+            class="btn btn-outline-primary flex-fill"
+            onclick="addToCart(${product.ID})"
+          >
+            Add to Cart
+          </button>
 
             <button 
               class="btn btn-outline-danger flex-fill"
@@ -109,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
       productsContainer.innerHTML = cardsHTML;
     }
   }
+  updateCartCount();
 });
 
 // Add to Wishlist function
@@ -169,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
       categoriesContainer.innerHTML = cardsHTML;
     }
   }
+  updateCartCount();
 });
 
 //navbar
@@ -180,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.add("active");
     }
   });
+  updateCartCount();
 });
 
 document.getElementById("logoutBtn").addEventListener("click", function () {

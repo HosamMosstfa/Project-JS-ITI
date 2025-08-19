@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.add("active");
     }
   });
+  updateCartCount();
 });
 
 function displayWishlist() {
