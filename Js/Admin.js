@@ -509,3 +509,108 @@ document
       modal.hide();
     }
   });
+
+// ------------------ORDERS MANAGEMENT-----------------------------
+
+function updateOrderStatus(orderId, newStatus) {
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  orders = orders.map(order => {
+    if (order.id === orderId) {
+      order.status = newStatus;
+    }
+    return order;
+  });
+  localStorage.setItem("orders", JSON.stringify(orders));
+  loadOrders();
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (!currentUser) window.location.href = "login.html";
+  if (currentUser.role !== "admin") window.location.href = "index.html";
+
+  // Display orders
+  displayOrdersAdmin();
+
+  // Search input
+  const searchInput = document.getElementById("searchOrders");
+  searchInput.addEventListener("input", (e) => {
+    displayOrdersAdmin(e.target.value);
+  });
+});
+
+function getUserName(userId) {
+  const users = JSON.parse(localStorage.getItem("usersList")) || [];
+  const user = users.find((u) => u.id === userId);
+  return user ? user.name : `User ${userId}`;
+}
+
+function getOrders() {
+  return JSON.parse(localStorage.getItem("orders")) || [];
+}
+
+function saveOrders(orders) {
+  localStorage.setItem("orders", JSON.stringify(orders));
+}
+
+function updateOrderStatus(orderId, newStatus) {
+  let orders = getOrders();
+  orders = orders.map((order) => {
+    if (order.id === orderId) order.status = newStatus;
+    return order;
+  });
+  saveOrders(orders);
+  displayOrdersAdmin();
+}
+
+function getStatusBadgeClass(status) {
+  switch (status.toLowerCase()) {
+    case "pending":
+      return "bg-warning";
+    case "confirmed":
+      return "bg-success";
+    case "rejected":
+      return "bg-danger";
+    default:
+      return "bg-secondary";
+  }
+}
+
+function displayOrdersAdmin(filter = "") {
+  const orders = getOrders().filter(
+    (order) =>
+      order.id.toString().includes(filter) ||
+      getUserName(order.userId).toLowerCase().includes(filter.toLowerCase()) ||
+      order.status.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  const tbody = document.getElementById("ordersTableBody");
+  if (orders.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center">No orders found</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = orders
+    .map(
+      (order) => `
+    <tr>
+      <td>${order.id}</td>
+      <td>${getUserName(order.userId)}</td>
+      <td>${new Date(order.date).toLocaleDateString()}</td>
+      <td>$${order.total?.toFixed(2) || 0}</td>
+      <td><span class="badge ${getStatusBadgeClass(order.status)}">${
+        order.status
+      }</span></td>
+      <td>
+        <button class="btn btn-success btn-sm me-1" onclick="updateOrderStatus(${
+          order.id
+        }, 'Confirmed')">Confirm</button>
+        <button class="btn btn-danger btn-sm" onclick="updateOrderStatus(${
+          order.id
+        }, 'Rejected')">Reject</button>
+      </td>
+    </tr>
+  `
+    )
+    .join("");
+}
