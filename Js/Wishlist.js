@@ -68,9 +68,15 @@ function addToCart(id) {
 
   let product = wishlist.find((item) => item.ID === id);
   if (product) {
-    cart.push(product);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Product added to cart!");
+    // Check if product already in cart
+    let existsInCart = cart.some((item) => item.ID === id);
+    if (!existsInCart) {
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Product added to cart!");
+    } else {
+      alert("Product is already in the cart!");
+    }
   }
 }
 
