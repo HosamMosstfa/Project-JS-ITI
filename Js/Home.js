@@ -62,48 +62,56 @@ document.addEventListener("DOMContentLoaded", () => {
   if (productsContainer) {
     if (products.length === 0) {
       productsContainer.innerHTML =
-        "<p class='text-center'>لا يوجد منتجات متاحة حالياً</p>";
+        "<p class='text-center'>There are no products currently available./p>";
     } else {
       let cardsHTML = "";
-      products.forEach((product) => {
+
+      let limitedProducts = products.slice(0, 8);
+
+      limitedProducts.forEach((product) => {
         cardsHTML += `
-    <div class="col-md-4 col-lg-3 mb-4">
-      <div class="card h-100 d-flex flex-column">
-        <img src="${product.Image}" class="card-img-top" alt="${product.Name}">
-        <div class="card-body d-flex flex-column">
+        <div class="col-md-4 col-lg-3 mb-4">
+          <div class="card h-100 d-flex flex-column shadow-sm">
+            <img src="${product.Image}" class="card-img-top" alt="${product.Name}">
+            <div class="card-body d-flex flex-column">
 
-          <h5 class="card-title" style="min-height: 3rem;">${product.Name}</h5>
+              <h5 class="card-title" style="min-height: 3rem;">${product.Name}</h5>
 
-          <p class="card-text text-success fw-bold" style="min-height: 1.5rem;">$${product.Price}</p>
+              <p class="card-text text-success fw-bold" style="min-height: 1.5rem;">$${product.Price}</p>
 
-          <p class="card-text" style="min-height: 1.5rem;">
-            <small class="text-muted">
-              Category: <span class="text-capitalize">${product.Category}</span>
-            </small>
-          </p>
+              <p class="card-text" style="min-height: 1.5rem;">
+                <small class="text-muted">
+                  Category: <span class="text-capitalize">${product.Category}</span>
+                </small>
+              </p>
 
-          <div class="mt-auto d-flex gap-2">
+              <div class="mt-auto d-flex gap-2">
+                <button 
+                  class="btn btn-outline-primary flex-fill"
+                  onclick="addToCart(${product.ID})"
+                >
+                  Add to Cart
+                </button>
 
-          <button 
-            class="btn btn-outline-primary flex-fill"
-            onclick="addToCart(${product.ID})"
-          >
-            Add to Cart
-          </button>
-
-            <button 
-              class="btn btn-outline-danger flex-fill"
-              onclick="addToWishlist(${product.ID})"
-            >
-              Add to Wishlist
-            </button>
-
+                <button 
+                  class="btn btn-outline-danger flex-fill"
+                  onclick="addToWishlist(${product.ID})"
+                >
+                  Add to Wishlist
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  `;
+      `;
       });
+
+      cardsHTML += `
+      <div class="col-12 text-center mt-3">
+        <a href="products.html" class="btn btn-dark px-4">See All Products</a>
+      </div>
+    `;
+
       productsContainer.innerHTML = cardsHTML;
     }
   }
@@ -141,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (categoriesContainer) {
     if (categories.length === 0) {
       categoriesContainer.innerHTML =
-        "<p class='text-center'>لا توجد فئات حالياً</p>";
+        "<p class='text-center'>There are no categories currently.</p>";
     } else {
       let cardsHTML = "";
 
@@ -187,3 +195,5 @@ document.getElementById("logoutBtn").addEventListener("click", function () {
   localStorage.removeItem("currentUser");
   window.location.href = "login.html";
 });
+
+

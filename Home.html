@@ -3,20 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home Page</title>
+    <title>MyStore | Home</title>
     <link rel="stylesheet" href="Css/Home.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top"
+    >
       <div class="container">
-        <a class="navbar-brand fw-bold" href="Home.html">MyStore</a>
+        <a class="navbar-brand fw-bold text-warning" href="Home.html"
+          >MyStore</a
+        >
         <button
           class="navbar-toggler"
           type="button"
@@ -27,7 +33,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto text-center">
             <li class="nav-item">
               <a class="nav-link" href="Home.html">Home</a>
             </li>
@@ -37,22 +43,24 @@
             <li class="nav-item">
               <a class="nav-link" href="wishlist.html">Wishlist</a>
             </li>
-            <li class="nav-item">
-              <span class="position-relative">
-                <a class="nav-link" href="Cart.html">Cart</a>
-                <span
-                  class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                  style="display: none"
-                >
-                  0
-                </span>
-              </span>
+            <li class="nav-item position-relative">
+              <a class="nav-link" href="Cart.html">Cart</a>
+              <span
+                class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                style="display: none"
+                >0</span
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="Orders.html">Orders</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="login.html">Login</a>
+              <button
+                id="logoutBtn"
+                class="nav-link btn btn-warning px-3 text-dark fw-bold ms-2"
+              >
+                Logout
+              </button>
             </li>
           </ul>
         </div>
@@ -60,46 +68,59 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="hero">
-      <h4>Exclusive Deals</h4>
-      <h2>Unbeatable Discounts</h2>
-      <h1>On All Your Favorites</h1>
-      <p>Grab the best offers & save up to 70% today!</p>
-      <button>Shop Now</button>
+    <section
+      id="hero"
+      class="text-center text-light d-flex flex-column justify-content-center align-items-center"
+    >
+      <h4 class="text-warning">Exclusive Deals</h4>
+      <h1 class="display-3 fw-bold">Unbeatable Discounts</h1>
+      <p class="lead">Grab the best offers & save up to 70% today!</p>
+      <a href="products.html" class="btn btn-warning btn-lg mt-3">Shop Now</a>
     </section>
 
-    <!-- Categoris Section -->
-    <section id="categories-section" class="container my-5">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Categories</h2>
-        <a href="categories.html" class="custom-badge text-uppercase"
+    <!-- Categories Section -->
+    <section id="categories" class="container py-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Categories</h2>
+        <a href="categories.html" class="btn btn-outline-dark btn-sm"
           >See All</a
         >
       </div>
-
-      <div class="row g-3" id="categoriesContainer"></div>
+      <div class="row g-4" id="categoriesContainer"></div>
     </section>
 
-    <!-- feature section -->
-    <section id="feature-section" class="container my-5">
-      <div class="container mt-5" id="featured-container">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>Featured Products</h2>
-          <a href="your-link.html" class="custom-badge text-uppercase"
+    <!-- Featured Products -->
+    <section id="featured" class="bg-light py-5">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold">Featured Products</h2>
+          <a href="your-link.html" class="btn btn-outline-dark btn-sm"
             >See More</a
           >
         </div>
-
-        <div class="row" id="featured-products-row"></div>
+        <div class="row g-4" id="featured-products-row"></div>
       </div>
     </section>
 
     <!-- All Products -->
-    <div class="container py-4">
-      <h2 class="mb-4 text-center">All Products</h2>
+    <section id="all-products" class="container py-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Latest Products</h2>
+        <a href="products.html" class="btn btn-outline-dark btn-sm">See All</a>
+      </div>
       <div id="productsContainer" class="row g-4"></div>
-    </div>
-    <!-- -->
+    </section>
+
+    <!-- Back to Top Button -->
+    <button
+      id="backToTop"
+      type="button"
+      class="btn btn-warning d-flex"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑
+    </button>
 
     <!-- Footer -->
     <footer class="bg-dark text-light pt-5">
@@ -115,36 +136,65 @@
 
           <!-- Quick Links -->
           <div class="col-md-4 mb-4">
-            <h5 class="fw-bold">Quick Links</h5>
-            <ul class="list-unstyled">
+            <h5 class="fw-bold mb-3 text-uppercase">Quick Links</h5>
+            <ul class="list-unstyled d-flex flex-column gap-2">
               <li>
-                <a href="#" class="text-light text-decoration-none">Home</a>
+                <a
+                  href="index.html"
+                  class="text-light text-decoration-none link-hover"
+                  >Home</a
+                >
               </li>
-
               <li>
-                <a href="#" class="text-light text-decoration-none">Products</a>
+                <a
+                  href="products.html"
+                  class="text-light text-decoration-none link-hover"
+                  >Products</a
+                >
               </li>
               <li>
-                <a href="#" class="text-light text-decoration-none">Contact</a>
+                <a
+                  href="contact.html"
+                  class="text-light text-decoration-none link-hover"
+                  >Contact</a
+                >
               </li>
             </ul>
           </div>
 
           <!-- Follow Us -->
           <div class="col-md-4 mb-4">
-            <h5 class="fw-bold">Follow Us</h5>
-            <a href="#" class="text-light me-3"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a href="#" class="text-light me-3"
-              ><i class="fab fa-twitter"></i
-            ></a>
-            <a href="#" class="text-light me-3"
-              ><i class="fab fa-instagram"></i
-            ></a>
-            <a href="#" class="text-light me-3"
-              ><i class="fab fa-linkedin-in"></i
-            ></a>
+            <h5 class="fw-bold mb-3 text-uppercase">Follow Us</h5>
+            <div class="d-flex gap-3">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                class="text-light social-link"
+              >
+                <i class="fab fa-facebook-f fa-lg"></i>
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                class="text-light social-link"
+              >
+                <i class="fab fa-twitter fa-lg"></i>
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                class="text-light social-link"
+              >
+                <i class="fab fa-instagram fa-lg"></i>
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                class="text-light social-link"
+              >
+                <i class="fab fa-linkedin-in fa-lg"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -154,13 +204,31 @@
         &copy; 2025 ITI. All rights reserved.
       </div>
     </footer>
-    <!-- Bootstrap Links -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-      crossorigin="anonymous"
-    ></script>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Back-to-Top logic: uses addEventListener (won't overwrite other handlers) -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("backToTop");
+        if (!btn) return;
+
+        const toggleBtn = () => {
+          const y = window.pageYOffset || document.documentElement.scrollTop;
+          btn.style.display = y > 300 ? "flex" : "none";
+        };
+
+        window.addEventListener("scroll", toggleBtn, { passive: true });
+        toggleBtn();
+
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+    </script>
     <script src="Js/data.js"></script>
     <script src="Js/Home.js"></script>
   </body>

@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 /////////Place Order/////////////////////
 document.getElementById("placeOrderBtn").addEventListener("click", () => {
-
   // Get cart from localStorage or empty if not found
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -36,7 +35,7 @@ document.getElementById("placeOrderBtn").addEventListener("click", () => {
     return;
   }
   // Calculate total price of all items
-  let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  let total = cart.reduce((sum, item) => sum + item.Price * item.quantity, 0);
 
   // Get existing orders from localStorage (or empty list)
   let orders = JSON.parse(localStorage.getItem("ordersList")) || [];
@@ -44,10 +43,10 @@ document.getElementById("placeOrderBtn").addEventListener("click", () => {
   // Create order object
   let newOrder = {
     orderID: orders.length + 1,
-    userID: currentUser.id,    
-    products: cart,     
-    total: total,          
-    status: "Pending"      
+    userID: currentUser.id,
+    products: cart,
+    total: total,
+    status: "Pending",
   };
 
   // Add new order to orders list
@@ -56,10 +55,8 @@ document.getElementById("placeOrderBtn").addEventListener("click", () => {
   // Save updated orders list back to localStorage
   localStorage.setItem("ordersList", JSON.stringify(orders));
 
-  
   localStorage.removeItem("cart");
 
-  
   alert("Your order has been placed successfully!");
 
   // Redirect to Orders page
@@ -141,28 +138,35 @@ function displayCartItems() {
   let cartHTML = "";
   cart.forEach((item) => {
     cartHTML += `
-      <div class="row cart-item mb-3" data-id="${item.ID}">
-        <div class="col-md-3">
-          <img src="${item.Image}" alt="${item.Name}" class="img-fluid rounded">
+      <div class="row cart-item mb-3 p-3 rounded shadow-sm bg-light align-items-center" data-id="${
+        item.ID
+      }">
+        <!-- Product Image -->
+        <div class="col-12 col-md-3 text-center mb-2 mb-md-0">
+          <img src="${item.Image}" alt="${
+      item.Name
+    }" class="img-fluid rounded" style="max-height:120px; object-fit:cover;">
         </div>
-        <div class="col-md-5">
-          <h5 class="card-title">${item.Name}</h5>
-          <p class="text-muted">Category: ${item.Category}</p>
+        <!-- Product Details -->
+        <div class="col-12 col-md-4 mb-2 mb-md-0">
+          <h5 class="card-title mb-1">${item.Name}</h5>
+          <p class="text-muted mb-1">Category: ${item.Category}</p>
         </div>
-        <div class="col-md-2">
-          <div class="input-group">
-            <button class="btn btn-outline-danger btn-sm minus-btn" type="button">-</button>
+        <!-- Quantity Controls -->
+        <div class="col-12 col-md-3 mb-2 mb-md-0 d-flex justify-content-center">
+          <div class="input-group input-group-sm w-100">
+            <button class="btn btn-outline-danger minus-btn" type="button">-</button>
             <input 
-              style="max-width: 100px" 
               type="number" 
-              class="form-control form-control-sm text-center quantity-input" 
-              value="${item.quantity || 1}" 
+              class="form-control text-center quantity-input" 
+              value=${item.quantity || 1}
               min="1">
-            <button class="btn btn-outline-primary btn-sm plus-btn" type="button">+</button>
+            <button class="btn btn-outline-primary plus-btn" type="button">+</button>
           </div>
         </div>
-        <div class="col-md-2 text-end">
-          <p class="fw-bold item-total">$${(
+        <!-- Price and Delete -->
+        <div class="col-12 col-md-2 d-flex flex-column align-items-end">
+          <p class="fw-bold item-total mb-2">$${(
             item.Price * (item.quantity || 1)
           ).toFixed(2)}</p>
           <button class="btn btn-sm btn-outline-danger delete-btn">
@@ -181,7 +185,7 @@ function displayCartItems() {
 }
 
 function attachEventListeners() {
-  // Attach event listeners to all delete buttons
+  // Attach event listeners to delete buttons only
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -193,26 +197,7 @@ function attachEventListeners() {
     });
   });
 
-  // Attach event listeners to quantity buttons
-  document.querySelectorAll(".minus-btn").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const input = this.nextElementSibling;
-      if (parseInt(input.value) > 1) {
-        input.value = parseInt(input.value) - 1;
-        updateCartItemQuantity(input);
-      }
-    });
-  });
-
-  document.querySelectorAll(".plus-btn").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const input = this.previousElementSibling;
-      input.value = parseInt(input.value) + 1;
-      updateCartItemQuantity(input);
-    });
-  });
-
-  // Attach event listeners to quantity inputs
+  // Attach event listeners to quantity inputs only (manual change)
   document.querySelectorAll(".quantity-input").forEach((input) => {
     input.addEventListener("change", function () {
       updateCartItemQuantity(this);
