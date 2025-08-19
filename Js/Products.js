@@ -25,6 +25,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // Data
   let productsList = JSON.parse(localStorage.getItem("productsList")) || [];
 
+  // Helpers: notifications
+  function showMessage(msg, type = "success") {
+    alert(msg);
+  }
+
+  // Add to Cart
+  function addToCart(product) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Check if product already exists in cart
+    const exists = cart.find((p) => p.Name === product.Name);
+
+    if (exists) {
+      // Show alert if already added
+      showMessage(`${product.Name} is already in Cart`, "warning");
+    } else {
+      // Add product and update storage
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      showMessage(`${product.Name} added to Cart`);
+      updateCartCount(); // optional: update cart counter if you have one
+    }
+  }
+
+  // Add to Wishlist
+  function addToWishlist(product) {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    // prevent duplicates
+    if (!wishlist.find((p) => p.Name === product.Name)) {
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      showMessage(`${product.Name} added to Wishlist`);
+    } else {
+      showMessage(`${product.Name} already in Wishlist`, "warning");
+    }
+  }
+
   // Render products
   function displayProducts(list) {
     if (!productsContainer) return;
@@ -39,30 +76,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     list.forEach((product) => {
-      productsContainer.innerHTML += `
-        <div class="col-md-4 col-lg-3 mb-4">
-          <div class="card h-100 d-flex flex-column">
-            <img src="${product.Image}" class="card-img-top" alt="${product.Name}">
-            <div class="card-body d-flex flex-column text-center">
-              <h5 class="card-title" style="min-height: 3rem;">${product.Name}</h5>
-              <p class="card-text text-success fw-bold" style="min-height: 1.5rem;">$${product.Price}</p>
-              <p class="card-text" style="min-height: 1.5rem;">
-                <small class="text-muted">
-                  Category: <span class="text-capitalize">${product.Category}</span>
-                </small>
-              </p>
-              <div class="mt-auto d-flex gap-2">
-                <button class="btn btn-outline-primary flex-fill" onclick="addToCart(${product.ID})">
-                   Add to Cart
-                </button>
-                <button class="btn btn-outline-danger flex-fill">
-                  Add to Wishlist
-                </button>
-              </div>
+      const card = document.createElement("div");
+      card.className = "col-md-5 col-lg-4 mb-4";
+      card.innerHTML = `
+        <div class="card h-100 d-flex flex-column">
+          <img src="${product.Image}" class="card-img-top" alt="${product.Name}">
+          <div class="card-body d-flex flex-column text-center">
+            <h5 class="card-title" style="min-height: 3rem;">${product.Name}</h5>
+            <p class="card-text text-success fw-bold" style="min-height: 1.5rem;">$${product.Price}</p>
+            <p class="card-text" style="min-height: 1.5rem;">
+              <small class="text-muted">
+                Category: <span class="text-capitalize">${product.Category}</span>
+              </small>
+            </p>
+            <div class="mt-auto d-flex gap-2">
+              <button class="btn btn-outline-primary flex-fill add-to-cart">
+                Add to Cart
+              </button>
+              <button class="btn btn-outline-danger flex-fill add-to-wishlist">
+                Add to Wishlist
+              </button>
             </div>
           </div>
         </div>
       `;
+
+      // attach events
+      card
+        .querySelector(".add-to-cart")
+        .addEventListener("click", () => addToCart(product));
+      card
+        .querySelector(".add-to-wishlist")
+        .addEventListener("click", () => addToWishlist(product));
+
+      productsContainer.appendChild(card);
     });
   }
 
@@ -170,5 +217,4 @@ document.addEventListener("DOMContentLoaded", () => {
   applyCategoryFromURL();
   displayProducts(productsList);
   applyFilters();
-  updateCartCount();
 });
