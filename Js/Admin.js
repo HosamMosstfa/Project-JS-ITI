@@ -598,15 +598,12 @@ function displayOrdersAdmin(filter = "") {
       <td>${getUserName(order.userId)}</td>
       <td>${new Date(order.date).toLocaleDateString()}</td>
       <td>$${order.total?.toFixed(2) || 0}</td>
-      <td><span class="badge ${getStatusBadgeClass(order.status)}">${
-        order.status
-      }</span></td>
+      <td><span class="badge ${getStatusBadgeClass(order.status)}">${order.status
+        }</span></td>
       <td>
-        <button class="btn btn-success btn-sm me-1" onclick="updateOrderStatus(${
-          order.id
+        <button class="btn btn-success btn-sm me-1" onclick="updateOrderStatus(${order.id
         }, 'Confirmed')">Confirm</button>
-        <button class="btn btn-danger btn-sm" onclick="updateOrderStatus(${
-          order.id
+        <button class="btn btn-danger btn-sm" onclick="updateOrderStatus(${order.id
         }, 'Rejected')">Reject</button>
       </td>
     </tr>

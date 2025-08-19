@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 });
 
-// Products + Filters
+//! Products + Filters
 document.addEventListener("DOMContentLoaded", () => {
   // Elements
   const productsContainer = document.getElementById("productsContainer");
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //! Populate categories
+  // Products categories
   function populateCategories() {
     const keyCats = (JSON.parse(localStorage.getItem("Categories")) || [])
       .map((c) => String(c).trim())
@@ -122,20 +122,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let categories = keyCats.length
       ? Array.from(new Set(keyCats))
       : Array.from(
-          new Set(productsList.map((p) => p.Category).filter(Boolean))
-        );
+        new Set(productsList.map((p) => p.Category).filter(Boolean))
+      );
 
     // Reset options
     categorySelect.innerHTML = `<option value="">All Categories</option>`;
     categories.forEach((cat) => {
       const val = String(cat).trim();
-      categorySelect.innerHTML += `<option value="${val}">${
-        val.charAt(0).toUpperCase() + val.slice(1)
-      }</option>`;
+      categorySelect.innerHTML += `<option value="${val}">${val.charAt(0).toUpperCase() + val.slice(1)
+        }</option>`;
     });
   }
 
-  // Init price fields
+  // price fields
   function initPriceFields() {
     const prices = (productsList || [])
       .map((p) => Number(p.Price) || 0)

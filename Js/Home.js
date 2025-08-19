@@ -1,4 +1,4 @@
-// Products
+// Home Products
 document.addEventListener("DOMContentLoaded", () => {
   let products = JSON.parse(localStorage.getItem("productsList")) || [];
 
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
       limitedProducts.forEach((product) => {
         cardsHTML += `
         <div class="col-md-4 col-lg-3 mb-4">
-          <div class="card h-100 d-flex flex-column shadow-sm">
+          <div class="card h-100 d-flex flex-column">
             <img src="${product.Image}" class="card-img-top" alt="${product.Name}">
             <div class="card-body d-flex flex-column">
 
@@ -160,8 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
         cardsHTML += `
           <div class="col-6 col-md-4 col-lg-3">
             <a href="products.html?category=${encodeURIComponent(
-              categoryName
-            )}" class="text-decoration-none text-dark">
+          categoryName
+        )}" class="text-decoration-none text-dark">
               <div class="card text-center p-3 h-100 category-card" style="cursor:pointer;">
                 <img src="image/${imageName}.jpg" alt="${displayName}" class="img-fluid mb-2" style="max-height: 120px; object-fit: contain;">
                 <div class="card-body d-flex align-items-center justify-content-center">
