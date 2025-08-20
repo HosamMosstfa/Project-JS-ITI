@@ -46,6 +46,11 @@
               <i class="bi bi-bag-check"></i> Orders
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-section="adminSection">
+              <i class="bi bi-person-badge"></i> Admin
+            </a>
+          </li>
         </ul>
 
         <!-- Right side logout button -->
@@ -340,7 +345,135 @@
         <tbody id="ordersTableBody"></tbody>
       </table>
     </div>
+    <!-- Users Management Section -->
+    <div id="usersSection" style="display: none;" class="mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+          <i class="bi bi-people text-primary"></i> Users Management
+        </h2>
+        <button class="btn btn-success shadow-sm" id="addUserBtn" data-bs-toggle="modal" data-bs-target="#addUserModal">
+          <i class="bi bi-person-plus"></i> Add Admin
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
 
+    <!-- Add Admin Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+      <div class="modal-dialog">
+        <form class="modal-content" id="addUserForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Admin</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-2">
+              <label>Username</label>
+              <input type="text" id="newAdminUsername" class="form-control" required />
+            </div>
+            <div class="mb-2">
+              <label>Email</label>
+              <input type="email" id="newAdminEmail" class="form-control" required />
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Add Admin
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Section -->
+    <div id="adminSection" style="display: none;" class="mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+          <i class="bi bi-person-badge text-primary"></i> Admin Management
+        </h2>
+        <button class="btn btn-success shadow-sm" id="addAdminBtn" data-bs-toggle="modal" data-bs-target="#addAdminModal">
+          <i class="bi bi-person-plus"></i> Add Admin
+        </button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminUsersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="adminSection" style="display: none;">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+          <i class="bi bi-person-badge text-primary"></i> Admin Management
+        </h2>
+        <button class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#addAdminModal">
+          <i class="bi bi-plus-lg"></i> Add/Change Admin
+        </button>
+      </div>
+    
+      <div class="modal fade" id="addAdminModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add or Update Admin</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="addAdminForm">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="newAdminEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="newAdminEmail" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    
+      <table class="table table-hover table-bordered align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminUsersTableBody">
+        </tbody>
+      </table>
+    </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="Js/data.js"></script>
