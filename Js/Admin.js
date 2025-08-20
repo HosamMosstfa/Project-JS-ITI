@@ -611,3 +611,105 @@ function displayOrdersAdmin(filter = "") {
     )
     .join("");
 }
+// Function to get users from localStorage safely
+function getUsers() {
+    return JSON.parse(localStorage.getItem("usersList")) || [];
+}
+
+// Function to save users to localStorage
+function saveUsers(users) {
+    localStorage.setItem("usersList", JSON.stringify(users));
+}
+
+// Function to render the Admin Users Table
+function renderAdminUsersTable() {
+    const users = getUsers();
+    const tbody = document.getElementById("adminUsersTableBody");
+    tbody.innerHTML = users.map((user) => {
+        // Hide "Remove Admin" button if the current user is the same as the one being displayed
+        const disableRemove = currentUser.email === user.email;
+
+        return `
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>
+                    <span class="badge bg-${user.role === "admin" ? "success" : "secondary"}">${user.role}</span>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center gap-2">
+                        ${user.role === "customer" ? `<button class="btn btn-sm btn-success" onclick="changeUserRole('${user.email}', 'admin')">Make Admin</button>` : ''}
+                        
+                        ${user.role === "admin" && !disableRemove ? `<button class="btn btn-sm btn-danger" onclick="changeUserRole('${user.email}', 'customer')">Remove Admin</button>` : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Function to change a user's role
+window.changeUserRole = function(email, newRole) {
+    const users = getUsers();
+    const userIndex = users.findIndex(u => u.email === email);
+    
+    if (userIndex !== -1) {
+        // Update user role
+        users[userIndex].role = newRole;
+        saveUsers(users);
+        
+        // If the current logged-in user's role is changed, redirect them
+        if (currentUser.email === email && newRole === "customer") {
+            alert("Your role has been changed. You will be logged out.");
+            localStorage.removeItem("currentUser");
+            window.location.href = "login.html";
+        } else {
+            // Re-render table to show the change
+            renderAdminUsersTable();
+        }
+    }
+};
+
+// Handle the form for adding/updating an admin
+document.getElementById("addAdminForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const email = document.getElementById("newAdminEmail").value.trim();
+    const users = getUsers();
+    const user = users.find(u => u.email === email);
+    
+    if (user) {
+        // If user exists, update their role to "admin"
+        if (user.role === "admin") {
+            alert("This user is already an admin.");
+        } else {
+            user.role = "admin";
+            saveUsers(users);
+            alert("User role updated to admin.");
+        }
+    } else {
+        // If user doesn't exist, create a new user with "admin" role
+        const newUserId = Date.now();
+        const newAdmin = {
+            id: newUserId,
+            name: "New Admin",
+            email: email,
+            password: "defaultPassword", 
+            role: "admin"
+        };
+        users.push(newAdmin);
+        saveUsers(users);
+        alert("New admin added.");
+    }
+    
+    renderAdminUsersTable();
+    this.reset();
+    bootstrap.Modal.getInstance(document.getElementById('addAdminModal')).hide();
+});
+
+// Event listener for showing the Admin section
+document.querySelector('a[data-section="adminSection"]').addEventListener('click', function() {
+    document.querySelectorAll('div[id$="Section"]').forEach(sec => sec.style.display = 'none');
+    document.getElementById('adminSection').style.display = 'block';
+    renderAdminUsersTable();
+});
