@@ -692,9 +692,9 @@ document.getElementById("addAdminForm").addEventListener("submit", function(e) {
         const newUserId = Date.now();
         const newAdmin = {
             id: newUserId,
-            name: "New Admin", // Or you can add a field for name in the form
+            name: "New Admin",
             email: email,
-            password: "defaultPassword", // A placeholder password
+            password: "defaultPassword", 
             role: "admin"
         };
         users.push(newAdmin);
