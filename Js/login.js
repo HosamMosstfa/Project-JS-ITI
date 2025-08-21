@@ -1,10 +1,9 @@
 // -----------------------------Login Form------------------
 document.addEventListener("DOMContentLoaded", function () {
-  // منع دخول صفحة اللوجين لو المستخدم مسجل دخول
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (currentUser) {
     if (currentUser.role === "admin") {
-      window.location.replace("admin.html");
+      window.location.replace("Admin.html");
     } else {
       window.location.replace("index.html");
     }
@@ -44,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
       localStorage.setItem("loggedIn", "true");
 
       if (foundUser.role === "admin") {
-        window.location.href = "admin.html";
+        window.location.href = "Admin.html";
       } else {
         window.location.href = "index.html";
       }
