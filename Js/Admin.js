@@ -86,7 +86,7 @@ document.getElementById("saveProductBtn").addEventListener("click", () => {
 
 // Product Table + Pagination + Search
 let products = JSON.parse(localStorage.getItem("productsList")) || [];
-let rowsPerPage = 7;
+let rowsPerPage = 5;
 let currentPage = 1;
 let filteredProducts = [...products];
 
@@ -433,7 +433,7 @@ function setupEditButtons() {
 function deleteProduct(id) {
   let products = JSON.parse(localStorage.getItem("productsList")) || [];
 
-  products = products.filter(product => product.ID !== id);
+  products = products.filter((product) => product.ID !== id);
 
   localStorage.setItem("productsList", JSON.stringify(products));
 
@@ -514,7 +514,7 @@ document
 
 function updateOrderStatus(orderId, newStatus) {
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  orders = orders.map(order => {
+  orders = orders.map((order) => {
     if (order.id === orderId) {
       order.status = newStatus;
     }
@@ -598,12 +598,15 @@ function displayOrdersAdmin(filter = "") {
       <td>${getUserName(order.userId)}</td>
       <td>${new Date(order.date).toLocaleDateString()}</td>
       <td>$${order.total?.toFixed(2) || 0}</td>
-      <td><span class="badge ${getStatusBadgeClass(order.status)}">${order.status
-        }</span></td>
+      <td><span class="badge ${getStatusBadgeClass(order.status)}">${
+        order.status
+      }</span></td>
       <td>
-        <button class="btn btn-success btn-sm me-1" onclick="updateOrderStatus(${order.id
+        <button class="btn btn-success btn-sm me-1" onclick="updateOrderStatus(${
+          order.id
         }, 'Confirmed')">Confirm</button>
-        <button class="btn btn-danger btn-sm" onclick="updateOrderStatus(${order.id
+        <button class="btn btn-danger btn-sm" onclick="updateOrderStatus(${
+          order.id
         }, 'Rejected')">Reject</button>
       </td>
     </tr>
@@ -613,103 +616,145 @@ function displayOrdersAdmin(filter = "") {
 }
 // Function to get users from localStorage safely
 function getUsers() {
-    return JSON.parse(localStorage.getItem("usersList")) || [];
+  return JSON.parse(localStorage.getItem("usersList")) || [];
 }
 
 // Function to save users to localStorage
 function saveUsers(users) {
-    localStorage.setItem("usersList", JSON.stringify(users));
+  localStorage.setItem("usersList", JSON.stringify(users));
 }
-
+// ------------------ Admins MANAGEMENT-----------------------------
 // Function to render the Admin Users Table
 function renderAdminUsersTable() {
-    const users = getUsers();
-    const tbody = document.getElementById("adminUsersTableBody");
-    tbody.innerHTML = users.map((user) => {
-        // Hide "Remove Admin" button if the current user is the same as the one being displayed
-        const disableRemove = currentUser.email === user.email;
+  const users = getUsers();
+  const tbody = document.getElementById("adminUsersTableBody");
+  tbody.innerHTML = users
+    .map((user, index) => {
+      // Hide "Remove Admin" button if the current user is the same as the one being displayed
+      const disableRemove = currentUser.email === user.email;
 
-        return `
+      return `
             <tr>
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
-                    <span class="badge bg-${user.role === "admin" ? "success" : "secondary"}">${user.role}</span>
+                    <span class="badge bg-${
+                      user.role === "admin" ? "success" : "secondary"
+                    }">${user.role}</span>
                 </td>
                 <td>
                     <div class="d-flex justify-content-center gap-2">
-                        ${user.role === "customer" ? `<button class="btn btn-sm btn-success" onclick="changeUserRole('${user.email}', 'admin')">Make Admin</button>` : ''}
+                        ${
+                          user.role === "customer"
+                            ? `<button class="btn btn-sm btn-success" onclick="changeUserRole('${user.email}', 'admin')">Make Admin</button>`
+                            : ""
+                        }
                         
-                        ${user.role === "admin" && !disableRemove ? `<button class="btn btn-sm btn-danger" onclick="changeUserRole('${user.email}', 'customer')">Remove Admin</button>` : ''}
+                        ${
+                          user.role === "admin" && !disableRemove
+                            ? `<button class="btn btn-sm btn-danger" onclick="changeUserRole('${user.email}', 'customer')">Remove Admin</button>`
+                            : ""
+                        }
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${index})">Delete User</button>
                     </div>
                 </td>
             </tr>
         `;
-    }).join('');
+    })
+    .join("");
 }
 
+// Function to delete a user and reorder IDs
+window.deleteUser = function (index) {
+  let users = getUsers();
+
+  if (confirm("Are you sure you want to delete this user?")) {
+    users.splice(index, 1);
+
+    // Reorder IDs starting from 1
+    users = users.map((u, i) => ({
+      ...u,
+      id: i + 1,
+    }));
+
+    saveUsers(users);
+    renderAdminUsersTable();
+  }
+};
+
 // Function to change a user's role
-window.changeUserRole = function(email, newRole) {
-    const users = getUsers();
-    const userIndex = users.findIndex(u => u.email === email);
-    
-    if (userIndex !== -1) {
-        // Update user role
-        users[userIndex].role = newRole;
-        saveUsers(users);
-        
-        // If the current logged-in user's role is changed, redirect them
-        if (currentUser.email === email && newRole === "customer") {
-            alert("Your role has been changed. You will be logged out.");
-            localStorage.removeItem("currentUser");
-            window.location.href = "login.html";
-        } else {
-            // Re-render table to show the change
-            renderAdminUsersTable();
-        }
+window.changeUserRole = function (email, newRole) {
+  const users = getUsers();
+  const userIndex = users.findIndex((u) => u.email === email);
+
+  if (userIndex !== -1) {
+    // Update user role
+    users[userIndex].role = newRole;
+    saveUsers(users);
+
+    // If the current logged-in user's role is changed, redirect them
+    if (currentUser.email === email && newRole === "customer") {
+      alert("Your role has been changed. You will be logged out.");
+      localStorage.removeItem("currentUser");
+      window.location.href = "login.html";
+    } else {
+      // Re-render table to show the change
+      renderAdminUsersTable();
     }
+  }
 };
 
 // Handle the form for adding/updating an admin
-document.getElementById("addAdminForm").addEventListener("submit", function(e) {
+document
+  .getElementById("addAdminForm")
+  .addEventListener("submit", function (e) {
     e.preventDefault();
+    const username = document.getElementById("newAdminUsername").value.trim();
     const email = document.getElementById("newAdminEmail").value.trim();
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
-    
+    const password = document.getElementById("newAdminPassword").value.trim();
+
+    let users = getUsers();
+    const user = users.find((u) => u.email === email);
+
     if (user) {
-        // If user exists, update their role to "admin"
-        if (user.role === "admin") {
-            alert("This user is already an admin.");
-        } else {
-            user.role = "admin";
-            saveUsers(users);
-            alert("User role updated to admin.");
-        }
-    } else {
-        // If user doesn't exist, create a new user with "admin" role
-        const newUserId = Date.now();
-        const newAdmin = {
-            id: newUserId,
-            name: "New Admin",
-            email: email,
-            password: "defaultPassword", 
-            role: "admin"
-        };
-        users.push(newAdmin);
+      if (user.role === "admin") {
+        alert("This user is already an admin.");
+      } else {
+        user.role = "admin";
         saveUsers(users);
-        alert("New admin added.");
+        alert("User role updated to admin.");
+      }
+    } else {
+      const newUserId =
+        users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1;
+
+      const newAdmin = {
+        id: newUserId,
+        name: username,
+        email: email,
+        password: password,
+        role: "admin",
+      };
+      users.push(newAdmin);
+      saveUsers(users);
+      alert("New admin added.");
     }
-    
+
     renderAdminUsersTable();
     this.reset();
-    bootstrap.Modal.getInstance(document.getElementById('addAdminModal')).hide();
-});
+    bootstrap.Modal.getInstance(
+      document.getElementById("addAdminModal")
+    ).hide();
+  });
 
 // Event listener for showing the Admin section
-document.querySelector('a[data-section="adminSection"]').addEventListener('click', function() {
-    document.querySelectorAll('div[id$="Section"]').forEach(sec => sec.style.display = 'none');
-    document.getElementById('adminSection').style.display = 'block';
+document
+  .querySelector('a[data-section="adminSection"]')
+  .addEventListener("click", function () {
+    document
+      .querySelectorAll('div[id$="Section"]')
+      .forEach((sec) => (sec.style.display = "none"));
+    document.getElementById("adminSection").style.display = "block";
     renderAdminUsersTable();
-});
+  });
