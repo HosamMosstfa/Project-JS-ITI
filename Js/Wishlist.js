@@ -53,6 +53,7 @@ function displayWishlist() {
       </div>
     `;
   });
+  updateCartCount();
 }
 
 function removeFromWishlist(id) {
