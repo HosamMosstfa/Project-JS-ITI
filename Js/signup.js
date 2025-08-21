@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentUser.role === "admin") {
       window.location.replace("admin.html");
     } else {
-      window.location.replace("Home.html");
+      window.location.replace("index.html");
     }
     return;
   }
