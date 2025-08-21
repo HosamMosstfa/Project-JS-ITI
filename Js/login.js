@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentUser.role === "admin") {
       window.location.replace("admin.html");
     } else {
-      window.location.replace("Home.html");
+      window.location.replace("index.html");
     }
     return;
   }
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (foundUser.role === "admin") {
         window.location.href = "admin.html";
       } else {
-        window.location.href = "Home.html";
+        window.location.href = "index.html";
       }
     } else {
       errorMsg.textContent = "Invalid email or password.";
